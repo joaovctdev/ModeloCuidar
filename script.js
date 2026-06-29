@@ -25,4 +25,10 @@ function cycleDots() {
 setActiveDot(0);
 setInterval(cycleDots, INTERVAL);
 
+// Preenche nome do usuário no boas-vindas
+const userNameEl     = document.querySelector('.user-name');
+const welcomeUserEl  = document.getElementById('welcomeUser');
+if (userNameEl && welcomeUserEl) {
+  welcomeUserEl.textContent = userNameEl.textContent;
+}
 

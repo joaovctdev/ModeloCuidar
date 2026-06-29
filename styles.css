@@ -69,9 +69,9 @@ img { display: block; }
 }
 
 .brand-logo {
-  height: clamp(28px, 3.5vh, 40px);
+  height: clamp(50px, 3.5vh, 40px);
   width: auto;
-  filter: drop-shadow(0 2px 6px rgba(255,255,255,0.9));
+ 
 }
 
 .brand-name {
@@ -181,10 +181,9 @@ img { display: block; }
   will-change: transform;
 }
 
-/* Tamanho fixo conforme especificação: 473×478px, gap 10px via margin */
 .carousel-img {
-  width: 473px;
-  height: 478px;
+  width: 453px;
+  height: clamp(320px, 20vh, 210px);
   object-fit: cover;
   flex-shrink: 0;
   user-select: none;
@@ -236,44 +235,47 @@ img { display: block; }
 
 .main {
   flex: 1;
-  padding: clamp(28px, 4.5vh, 52px) clamp(16px, 4vw, 48px) clamp(36px, 5vh, 60px);
+  padding: 6px clamp(16px, 4vw, 48px) clamp(20px, 3vh, 32px);
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
 }
 
 .section-header {
-  text-align: center;
-  margin-bottom: clamp(24px, 3.5vh, 42px);
+  margin-bottom: clamp(10px, 1.5vh, 16px);
+  
+}
+
+.welcome-block {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.welcome-logo {
+  height: 120px;
+  width: auto;
+  flex-shrink: 0;
+}
+
+.welcome-text {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .section-title {
-  font-size: clamp(1.5rem, 2.2vw, 2.1rem);
+  font-size: clamp(1.4rem, 2vw, 2rem);
   font-weight: 700;
   color: var(--green-2);
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  position: relative;
-  display: inline-block;
-}
-
-.section-title::after {
-  content: '';
-  position: absolute;
-  bottom: -8px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 38px;
-  height: 3px;
-  border-radius: 2px;
-  background: var(--primary);
+  letter-spacing: 1px;
+  line-height: 1.2;
 }
 
 .section-sub {
   font-size: clamp(0.85rem, 1.1vw, 1rem);
   color: var(--green-1);
   opacity: 0.68;
-  margin-top: 16px;
 }
 
 /* ── Cards Grid ── */
