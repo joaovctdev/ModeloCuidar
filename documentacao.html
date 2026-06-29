@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Documentação — Cuidar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F3FFE7; --primary:#03CE5C; --g1:#05893F; --g2:#055628;
+  --dark:#113C1D; --dark2:#0B2C14; --darkest:#01352E;
+  --font:'Barlow Condensed',sans-serif; --tr:.22s ease;
+  --red:#C53030; --red-bg:#FFF5F5; --red-bd:#FEB2B2;
+  --yellow:#92400E; --yellow-bg:#FFFBEB; --yellow-bd:#F6E05E;
+  --green:#276749; --green-bg:#F0FFF4; --green-bd:#9AE6B4;
+  --blue:#2B6CB0; --blue-bg:#EBF8FF; --blue-bd:#90CDF4;
+  --purple:#553C9A; --purple-bg:#FAF5FF; --purple-bd:#D6BCFA;
+  --gray:#4A5568; --gray-bg:#F7FAFC; --gray-bd:#E2E8F0;
+  --radius:12px; --sh:0 2px 12px rgba(0,0,0,.07);
+  --sh-md:0 8px 28px rgba(0,0,0,.12);
+  --sh-lg:0 20px 60px rgba(1,53,46,.22);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--dark);
+     min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+button{font-family:var(--font)}
+
+/* ═══ HEADER ════════════════════════════════════════════════ */
+.header{
+  position:sticky;top:0;z-index:300;height:64px;
+  background:linear-gradient(110deg,var(--g2),var(--darkest));
+  border-bottom:1px solid rgba(3,206,92,.15);
+  box-shadow:0 3px 18px rgba(1,53,46,.4);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 clamp(14px,3vw,40px);gap:16px
+}
+.brand{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.brand-logo{height:34px;filter:drop-shadow(0 2px 6px rgba(255,255,255,.9))}
+.brand-name{font-size:1.65rem;font-weight:700;color:var(--bg);letter-spacing:4px}
+.nav{display:flex;align-items:center;gap:2px;flex:1;justify-content:center}
+.nav-link{font-size:.8rem;font-weight:600;color:rgba(255,255,255,.72);
+          text-transform:uppercase;padding:6px 9px;border-radius:6px;
+          transition:color var(--tr),background var(--tr);white-space:nowrap}
+.nav-link:hover,.nav-link.active{color:var(--primary);background:rgba(3,206,92,.1)}
+.nav-sep{color:rgba(3,206,92,.2);user-select:none;font-size:.8rem}
+.user-info{display:flex;align-items:center;gap:9px;flex-shrink:0}
+.user-avatar{width:34px;height:34px;border-radius:50%;
+             background:linear-gradient(135deg,var(--primary),var(--g1));
+             color:var(--darkest);font-size:.74rem;font-weight:700;
+             display:flex;align-items:center;justify-content:center;
+             border:2px solid rgba(3,206,92,.4)}
+.user-text{display:flex;flex-direction:column;line-height:1.2}
+.user-label{font-size:.6rem;color:rgba(255,255,255,.4);text-transform:uppercase}
+.user-name{font-size:.86rem;font-weight:600;color:rgba(255,255,255,.9);white-space:nowrap}
+
+/* ═══ MAIN ═══════════════════════════════════════════════════ */
+.main{flex:1;padding:28px clamp(14px,3vw,48px) 60px;max-width:1600px;margin:0 auto;width:100%}
+
+.page-title{font-size:1.8rem;font-weight:700;color:var(--g2);
+            letter-spacing:2px;text-transform:uppercase;
+            display:flex;align-items:center;gap:10px;margin-bottom:22px}
+.page-title svg{width:24px;height:24px;color:var(--primary)}
+
+/* ═══ PAINEL ══════════════════════════════════════════════════ */
+.painel{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:24px}
+.p-card{
+  border-radius:var(--radius);padding:16px 18px;
+  display:flex;align-items:center;gap:14px;
+  box-shadow:var(--sh);cursor:pointer;
+  transition:transform var(--tr),box-shadow var(--tr);
+  border-left:4px solid transparent;
+}
+.p-card:hover{transform:translateY(-3px);box-shadow:var(--sh-md)}
+.p-card.vencido  {background:var(--red-bg);    border-color:var(--red)}
+.p-card.a_vencer {background:var(--yellow-bg); border-color:#D69E2E}
+.p-card.apto     {background:var(--green-bg);  border-color:var(--green)}
+.p-card.sem_doc  {background:var(--gray-bg);   border-color:#718096}
+.p-card.aceito   {background:var(--blue-bg);   border-color:var(--blue)}
+.p-card.rejeitado{background:var(--purple-bg); border-color:var(--purple)}
+.p-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.p-card.vencido   .p-icon{background:rgba(197,48,48,.1);  color:var(--red)}
+.p-card.a_vencer  .p-icon{background:rgba(214,158,46,.1); color:#D69E2E}
+.p-card.apto      .p-icon{background:rgba(39,103,73,.1);  color:var(--green)}
+.p-card.sem_doc   .p-icon{background:rgba(74,85,104,.1);  color:#718096}
+.p-card.aceito    .p-icon{background:rgba(43,108,176,.1); color:var(--blue)}
+.p-card.rejeitado .p-icon{background:rgba(85,60,154,.1);  color:var(--purple)}
+.p-icon svg{width:22px;height:22px}
+.p-num{font-size:2rem;font-weight:700;line-height:1}
+.p-card.vencido   .p-num{color:var(--red)}
+.p-card.a_vencer  .p-num{color:#D69E2E}
+.p-card.apto      .p-num{color:var(--green)}
+.p-card.sem_doc   .p-num{color:#718096}
+.p-card.aceito    .p-num{color:var(--blue)}
+.p-card.rejeitado .p-num{color:var(--purple)}
+.p-label{font-size:.8rem;font-weight:600;text-transform:uppercase;letter-spacing:.4px;opacity:.65;margin-top:1px}
+
+/* ═══ FILTROS ═════════════════════════════════════════════════ */
+.filtros-wrap{
+  background:#fff;border-radius:var(--radius);
+  border:1px solid rgba(5,134,63,.1);
+  box-shadow:var(--sh);padding:14px 18px;margin-bottom:16px
+}
+.filtros-titulo{font-size:.78rem;font-weight:700;text-transform:uppercase;
+                letter-spacing:.5px;color:var(--g1);margin-bottom:10px;
+                display:flex;align-items:center;gap:6px}
+.filtros-titulo svg{width:14px;height:14px}
+.filtros-grid{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.filtros-grid input,.filtros-grid select{
+  font-family:var(--font);font-size:.9rem;padding:7px 12px;
+  border-radius:8px;border:1.5px solid rgba(5,134,63,.18);
+  background:var(--bg);color:var(--dark);outline:none;
+  transition:border-color var(--tr)
+}
+.filtros-grid input{min-width:180px}
+.filtros-grid input:focus,.filtros-grid select:focus{border-color:var(--primary)}
+.btn-limpar{
+  font-family:var(--font);font-size:.82rem;font-weight:600;
+  padding:7px 14px;border-radius:8px;border:1.5px solid rgba(5,134,63,.2);
+  background:transparent;color:var(--g1);cursor:pointer;
+  transition:background var(--tr),color var(--tr)
+}
+.btn-limpar:hover{background:rgba(3,206,92,.08)}
+
+/* ═══ TABELA ══════════════════════════════════════════════════ */
+.tabela-wrap{overflow-x:auto;border-radius:var(--radius);
+             box-shadow:var(--sh);border:1px solid rgba(5,134,63,.1)}
+table{width:100%;border-collapse:collapse;background:#fff;font-size:.84rem}
+thead th{
+  background:linear-gradient(110deg,var(--g2),var(--darkest));
+  color:rgba(255,255,255,.88);font-size:.7rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.5px;
+  padding:10px 6px;white-space:nowrap;text-align:center;
+  position:sticky;top:0;z-index:10
+}
+thead th:first-child{text-align:left;padding-left:14px;min-width:190px}
+thead th:last-child{min-width:88px}
+tbody tr{border-bottom:1px solid rgba(5,134,63,.06);transition:background var(--tr)}
+tbody tr:hover{background:rgba(3,206,92,.03)}
+tbody tr:last-child{border-bottom:none}
+.col-colab{padding:10px 8px 10px 14px}
+.c-nome{font-size:.94rem;font-weight:700;color:var(--dark)}
+.c-mat{font-size:.72rem;color:#aaa;margin-left:4px;font-weight:400}
+.c-cargo{font-size:.72rem;color:var(--g1);opacity:.7;text-transform:uppercase;letter-spacing:.2px}
+
+/* ═══ BADGE ═══════════════════════════════════════════════════ */
+td.cc{text-align:center;padding:5px 3px;vertical-align:middle}
+.badge{
+  display:inline-flex;flex-direction:column;align-items:center;
+  gap:1px;padding:4px 6px;border-radius:7px;min-width:60px;
+  cursor:pointer;border:1.5px solid transparent;
+  transition:transform var(--tr),box-shadow var(--tr);position:relative
+}
+.badge:hover{transform:scale(1.1);box-shadow:0 4px 12px rgba(0,0,0,.15)}
+.badge.apto    {background:var(--green-bg); border-color:var(--green-bd);color:var(--green)}
+.badge.a_vencer{background:var(--yellow-bg);border-color:var(--yellow-bd);color:var(--yellow)}
+.badge.vencido {background:var(--red-bg);  border-color:var(--red-bd);  color:var(--red)}
+.badge.extra   {background:#F0F4FF;        border-color:#C3DAFE;        color:#3730A3}
+.badge.nao_exig{background:var(--gray-bg); border-color:transparent;    color:#CBD5E0;
+                cursor:pointer;min-width:40px}
+.badge.nao_exig:hover{border-color:#CBD5E0;background:#EDF2F7}
+.badge.sem_data{background:rgba(3,206,92,.07);border:1.5px dashed var(--primary);
+                color:var(--g1);animation:pulse 2.2s ease-in-out infinite}
+.badge.sem_data:hover{background:rgba(3,206,92,.15)}
+@keyframes pulse{0%,100%{border-color:var(--primary)}50%{border-color:var(--g1)}}
+.b-icon{font-size:.8rem}
+.b-date{font-size:.68rem;font-weight:600;line-height:1}
+.b-add {font-size:.62rem;font-weight:700;text-transform:uppercase}
+
+/* Dot de validação (canto superior direito do badge) */
+.badge .vdot{
+  position:absolute;top:-4px;right:-4px;
+  width:10px;height:10px;border-radius:50%;border:2px solid #fff
+}
+.vdot.ok  {background:#38A169}
+.vdot.nok {background:#E53E3E}
+
+/* ═══ BTN + DOC ═══════════════════════════════════════════════ */
+td.col-act{text-align:center;padding:5px 6px;vertical-align:middle}
+.btn-add-row{
+  display:inline-flex;align-items:center;gap:4px;
+  font-family:var(--font);font-size:.78rem;font-weight:700;
+  text-transform:uppercase;padding:6px 10px;border-radius:7px;
+  border:none;cursor:pointer;
+  background:var(--primary);color:var(--darkest);
+  transition:background var(--tr),transform var(--tr)
+}
+.btn-add-row:hover{background:var(--g1);color:#fff;transform:scale(1.04)}
+.btn-add-row svg{width:12px;height:12px}
+
+/* ═══ LOADING / EMPTY ═════════════════════════════════════════ */
+.loading{text-align:center;padding:60px;font-size:1.1rem;color:var(--g1);opacity:.7}
+
+/* ═══ MODAL ═══════════════════════════════════════════════════ */
+.overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(1,53,46,.5);z-index:500;
+  align-items:center;justify-content:center;
+  backdrop-filter:blur(5px)
+}
+.overlay.open{display:flex}
+.modal{
+  background:#fff;border-radius:16px;
+  width:100%;max-width:560px;max-height:90vh;overflow-y:auto;
+  box-shadow:var(--sh-lg);animation:mIn .2s ease
+}
+@keyframes mIn{from{opacity:0;transform:scale(.93) translateY(-14px)}to{opacity:1;transform:none}}
+
+/* Cabeçalho do modal */
+.modal-head{
+  padding:22px 26px 16px;
+  border-bottom:1px solid rgba(5,134,63,.1);
+  display:flex;align-items:flex-start;justify-content:space-between;
+  position:sticky;top:0;background:#fff;z-index:5;border-radius:16px 16px 0 0
+}
+.modal-head-info{}
+.modal-badge-title{
+  display:flex;align-items:center;gap:8px;margin-bottom:4px
+}
+.modal-curso-label{
+  font-size:1.4rem;font-weight:700;color:var(--g2);
+  text-transform:uppercase;letter-spacing:1px
+}
+.modal-status-pill{
+  font-size:.72rem;font-weight:700;padding:3px 8px;border-radius:20px;
+  text-transform:uppercase;letter-spacing:.5px
+}
+.pill-apto    {background:var(--green-bg);color:var(--green);border:1px solid var(--green-bd)}
+.pill-a_vencer{background:var(--yellow-bg);color:var(--yellow);border:1px solid var(--yellow-bd)}
+.pill-vencido {background:var(--red-bg);color:var(--red);border:1px solid var(--red-bd)}
+.pill-sem_data{background:var(--gray-bg);color:#718096;border:1px solid var(--gray-bd)}
+.modal-sub{font-size:.88rem;color:var(--g1);opacity:.7}
+.modal-close{background:none;border:none;cursor:pointer;padding:4px;
+             color:#A0AEC0;font-size:1.3rem;line-height:1;transition:color var(--tr)}
+.modal-close:hover{color:var(--red)}
+
+/* Abas */
+.modal-tabs{display:flex;border-bottom:2px solid rgba(5,134,63,.1);padding:0 26px}
+.tab-btn{
+  font-family:var(--font);font-size:.82rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:.5px;padding:10px 14px;background:none;border:none;
+  cursor:pointer;color:#A0AEC0;border-bottom:2px solid transparent;
+  margin-bottom:-2px;transition:color var(--tr),border-color var(--tr)
+}
+.tab-btn.active{color:var(--g2);border-bottom-color:var(--primary)}
+.tab-btn:hover:not(.active){color:var(--g1)}
+
+/* Corpo do modal */
+.modal-body{padding:20px 26px 26px}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+
+.form-group{margin-bottom:15px}
+.form-group label{
+  display:block;font-size:.78rem;font-weight:700;
+  color:var(--dark);text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px
+}
+.form-group select,.form-group input[type="date"],.form-group input[type="file"],
+.form-group textarea{
+  width:100%;font-family:var(--font);font-size:.96rem;
+  padding:9px 12px;border-radius:8px;
+  border:1.5px solid rgba(5,134,63,.2);
+  outline:none;transition:border-color var(--tr);
+  background:var(--bg);color:var(--dark)
+}
+.form-group textarea{resize:vertical;min-height:80px}
+.form-group select:focus,.form-group input:focus,.form-group textarea:focus{border-color:var(--primary)}
+.form-hint{font-size:.74rem;color:#718096;margin-top:4px}
+.error-msg{color:var(--red);font-size:.8rem;margin-top:5px}
+
+/* Info do documento */
+.doc-info-box{
+  background:var(--gray-bg);border-radius:10px;border:1px solid var(--gray-bd);
+  padding:12px 14px;margin-bottom:15px
+}
+.doc-info-row{display:flex;justify-content:space-between;align-items:center;
+              font-size:.84rem;padding:3px 0}
+.doc-info-row span:first-child{color:#718096;font-weight:600}
+.doc-info-row span:last-child{color:var(--dark);font-weight:500;text-align:right;max-width:60%}
+.doc-pdf-link{color:var(--blue);font-weight:600;cursor:pointer}
+.doc-pdf-link:hover{text-decoration:underline}
+.no-doc-msg{text-align:center;padding:20px;color:#A0AEC0;font-size:.9rem}
+
+/* Validação toggle */
+.val-toggle{display:flex;gap:10px;margin-bottom:14px}
+.val-opt{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;
+          padding:10px;border-radius:9px;border:2px solid transparent;
+          cursor:pointer;font-size:.9rem;font-weight:700;text-transform:uppercase;
+          transition:all var(--tr)}
+.val-opt input[type=radio]{display:none}
+.val-opt.apto-opt{border-color:var(--green-bd);color:var(--green);background:var(--green-bg)}
+.val-opt.apto-opt.selected{background:#C6F6D5;border-color:var(--green);box-shadow:0 0 0 3px rgba(39,103,73,.15)}
+.val-opt.nok-opt{border-color:var(--red-bd);color:var(--red);background:var(--red-bg)}
+.val-opt.nok-opt.selected{background:#FED7D7;border-color:var(--red);box-shadow:0 0 0 3px rgba(197,48,48,.15)}
+.val-status-box{
+  padding:12px 14px;border-radius:10px;margin-bottom:14px;
+  font-size:.88rem;display:flex;align-items:flex-start;gap:8px
+}
+.val-status-box.ok {background:#F0FFF4;border:1px solid var(--green-bd);color:var(--green)}
+.val-status-box.nok{background:#FFF5F5;border:1px solid var(--red-bd);  color:var(--red)}
+
+/* Ações do modal */
+.modal-actions{
+  display:flex;gap:10px;padding:14px 26px 22px;
+  border-top:1px solid rgba(5,134,63,.1)
+}
+.btn{flex:1;font-family:var(--font);font-size:.96rem;font-weight:700;
+     text-transform:uppercase;letter-spacing:.4px;padding:11px;
+     border-radius:8px;border:none;cursor:pointer;
+     transition:background var(--tr),transform var(--tr)}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--primary);color:var(--darkest)}
+.btn-primary:hover{background:var(--g1);color:#fff}
+.btn-success{background:#38A169;color:#fff}
+.btn-success:hover{background:#2F855A}
+.btn-cancel{background:#EDF2F7;color:var(--dark)}
+.btn-cancel:hover{background:#E2E8F0}
+
+/* ═══ FOOTER ══════════════════════════════════════════════════ */
+.footer{background:var(--dark2);text-align:center;padding:16px 40px;
+        font-size:.8rem;font-family:var(--font);color:rgba(255,255,255,.35)}
+
+@media(max-width:1200px){.painel{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:768px){.painel{grid-template-columns:repeat(2,1fr)};
+  .modal{margin:12px;max-height:95vh}}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="brand">
+    <img src="Gemini_Generated_Image_gokv47gokv47gokv 1 (1).png" alt="Logo" class="brand-logo">
+    <span class="brand-name">Cuidar</span>
+  </div>
+  <nav class="nav">
+    <a href="http://localhost:3000/" class="nav-link">Home</a>
+    <span class="nav-sep">|</span>
+    <a href="/documentacao.html" class="nav-link active">Documentação</a>
+    <span class="nav-sep">|</span>
+    <a href="#" class="nav-link">Ações</a>
+    <span class="nav-sep">|</span>
+    <a href="#" class="nav-link">Trânsito</a>
+    <span class="nav-sep">|</span>
+    <a href="#" class="nav-link">Notificações e Tratativas</a>
+    <span class="nav-sep">|</span>
+    <a href="#" class="nav-link">Indicadores</a>
+  </nav>
+  <div class="user-info">
+    <div class="user-avatar">JV</div>
+    <div class="user-text">
+      <span class="user-label">Bem-vindo,</span>
+      <span class="user-name">João Victor Santos</span>
+    </div>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main class="main">
+  <h1 class="page-title">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+      <polyline points="14 2 14 8 20 8"/>
+      <line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/>
+    </svg>
+    Documentação de Colaboradores
+  </h1>
+
+  <!-- PAINEL -->
+  <div class="painel">
+    <div class="p-card vencido" onclick="filtrarPainel('vencido')">
+      <div class="p-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+      <div><div class="p-num" id="n-vencido">—</div><div class="p-label">Vencidos</div></div>
+    </div>
+    <div class="p-card a_vencer" onclick="filtrarPainel('a_vencer')">
+      <div class="p-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+      <div><div class="p-num" id="n-avencer">—</div><div class="p-label">A Vencer 30d</div></div>
+    </div>
+    <div class="p-card apto" onclick="filtrarPainel('apto')">
+      <div class="p-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+      <div><div class="p-num" id="n-apto">—</div><div class="p-label">Aptos</div></div>
+    </div>
+    <div class="p-card sem_doc" onclick="filtrarPainel('sem_data')">
+      <div class="p-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg></div>
+      <div><div class="p-num" id="n-semdoc">—</div><div class="p-label">Sem Documento</div></div>
+    </div>
+    <div class="p-card aceito" onclick="filtrarPainel('aceito')">
+      <div class="p-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+      <div><div class="p-num" id="n-aceito">—</div><div class="p-label">Aceitos</div></div>
+    </div>
+    <div class="p-card rejeitado" onclick="filtrarPainel('rejeitado')">
+      <div class="p-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div>
+      <div><div class="p-num" id="n-rejeitado">—</div><div class="p-label">Rejeitados</div></div>
+    </div>
+  </div>
+
+  <!-- FILTROS -->
+  <div class="filtros-wrap">
+    <div class="filtros-titulo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+      Filtros
+    </div>
+    <div class="filtros-grid">
+      <input type="text"  id="f-nome"    placeholder="🔍 Buscar por nome...">
+      <select id="f-setor"><option value="">Todos os setores</option><option value="OPERACIONAL">Operacional</option><option value="ADM">ADM</option></select>
+      <select id="f-cargo"><option value="">Todos os cargos</option></select>
+      <select id="f-status"><option value="">Todos os status</option><option value="vencido">Vencido</option><option value="a_vencer">A Vencer</option><option value="apto">Apto</option><option value="sem_data">Sem Documento</option></select>
+      <select id="f-validacao"><option value="">Todas as validações</option><option value="aceito">Aceitos</option><option value="rejeitado">Rejeitados</option><option value="pendente">Pendente validação</option></select>
+      <select id="f-curso"><option value="">Todos os cursos</option></select>
+      <button class="btn-limpar" onclick="limparFiltros()">✕ Limpar</button>
+    </div>
+  </div>
+
+  <!-- TABELA -->
+  <div class="tabela-wrap">
+    <div class="loading" id="loading">Carregando dados...</div>
+    <table id="tabela" style="display:none">
+      <thead id="thead"></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+</main>
+
+<footer class="footer"><p>&copy; 2024 Cuidar — Todos os direitos reservados</p></footer>
+
+<!-- MODAL -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <!-- Cabeçalho -->
+    <div class="modal-head">
+      <div class="modal-head-info">
+        <div class="modal-badge-title">
+          <span class="modal-curso-label" id="m-titulo"></span>
+          <span class="modal-status-pill" id="m-pill"></span>
+        </div>
+        <div class="modal-sub" id="m-sub"></div>
+      </div>
+      <button class="modal-close" onclick="fecharModal()">✕</button>
+    </div>
+
+    <!-- Abas -->
+    <div class="modal-tabs">
+      <button class="tab-btn active" onclick="abaAtiva('doc',this)">📎 Documento</button>
+      <button class="tab-btn"        onclick="abaAtiva('info',this)">ℹ️ Informações</button>
+      <button class="tab-btn"        onclick="abaAtiva('val',this)">✅ Validação</button>
+    </div>
+
+    <!-- Corpo -->
+    <div class="modal-body">
+
+      <!-- ABA DOCUMENTO -->
+      <div class="tab-panel active" id="tab-doc">
+        <div class="form-group" id="grp-curso" style="display:none">
+          <label>Curso / Documento</label>
+          <select id="m-curso"></select>
+        </div>
+        <div class="form-group">
+          <label id="m-data-label">Data de Emissão *</label>
+          <input type="date" id="m-data">
+          <div class="form-hint" id="m-data-hint"></div>
+          <div class="error-msg" id="m-erro"></div>
+        </div>
+        <div class="form-group">
+          <label>PDF do Documento <span style="font-weight:400;opacity:.55">(opcional)</span></label>
+          <input type="file" id="m-pdf" accept=".pdf">
+        </div>
+      </div>
+
+      <!-- ABA INFORMAÇÕES -->
+      <div class="tab-panel" id="tab-info">
+        <div id="info-content" class="no-doc-msg">Nenhum documento cadastrado ainda.</div>
+      </div>
+
+      <!-- ABA VALIDAÇÃO -->
+      <div class="tab-panel" id="tab-val">
+        <div id="val-content">
+          <div class="no-doc-msg">Adicione um documento para habilitar a validação.</div>
+        </div>
+      </div>
+
+    </div><!-- /modal-body -->
+
+    <!-- Ações -->
+    <div class="modal-actions" id="modal-actions">
+      <button class="btn btn-cancel"  onclick="fecharModal()">Cancelar</button>
+      <button class="btn btn-primary" id="btn-salvar" onclick="salvarDocumento()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const API    = 'http://localhost:3000/api';
+const CURSOS = ['ASO','NR_10','NR_12','NR_35','NR_10SEP','POP00','DIRECAO_DEF',
+                'OPERADOR','RETRO','CNH','PODADOR','OFFICE','5S','ELETROTECNICO'];
+const LABELS = {
+  ASO:'ASO', NR_10:'NR-10', NR_12:'NR-12', NR_35:'NR-35',
+  NR_10SEP:'NR-10 SEP', POP00:'POP-00', DIRECAO_DEF:'Dir. Defensiva',
+  OPERADOR:'Operador', RETRO:'Retroesc.', CNH:'CNH',
+  PODADOR:'Podador', OFFICE:'Office', '5S':'5S', ELETROTECNICO:'Eletrotecc.'
+};
+const DATA_LABEL = {
+  ASO:'Data de Emissão (val. 1 ano)',
+  NR_10:'Data de Emissão (val. 2 anos)', NR_12:'Data de Emissão (val. 2 anos)',
+  NR_35:'Data de Emissão (val. 2 anos)', NR_10SEP:'Data de Emissão (val. 2 anos)',
+  POP00:'Data de Emissão (val. 2 anos)', DIRECAO_DEF:'Data de Emissão (val. 2 anos)',
+  OPERADOR:'Data de Emissão (val. 2 anos)', RETRO:'Data de Emissão (val. 2 anos)',
+  PODADOR:'Data de Emissão (val. 2 anos)', CNH:'Vencimento da CNH',
+  OFFICE:'Data de Conclusão (sem validade)', '5S':'Data de Conclusão (sem validade)',
+  ELETROTECNICO:'Data de Conclusão (sem validade)'
+};
+const STATUS_ICON = {apto:'✔',a_vencer:'⚠',vencido:'✖',sem_data:'＋',extra:'＋',nao_exig:'＋'};
+
+let dados=[], modalCtx={}, filtroAtual='';
+
+// ─── Carrega ─────────────────────────────────────────────────
+async function carregar(){
+  try{
+    const r=await fetch(`${API}/colaboradores`);
+    const j=await r.json();
+    dados=j.colaboradores;
+    const t=j.totais;
+    document.getElementById('n-vencido').textContent  = t.vencido;
+    document.getElementById('n-avencer').textContent  = t.a_vencer;
+    document.getElementById('n-apto').textContent     = t.apto;
+    document.getElementById('n-semdoc').textContent   = t.sem_doc;
+    document.getElementById('n-aceito').textContent   = t.aceito;
+    document.getElementById('n-rejeitado').textContent= t.rejeitado;
+    popularFiltrosCargo();
+    popularFiltrosCurso();
+    renderTabela(dados);
+    document.getElementById('loading').style.display='none';
+    document.getElementById('tabela').style.display='table';
+  }catch(e){
+    document.getElementById('loading').innerHTML=
+      '<span style="color:#C53030">⚠ Servidor offline. Execute: <code>node server.js</code></span>';
+  }
+}
+
+function popularFiltrosCargo(){
+  const sel=document.getElementById('f-cargo');
+  const cargos=[...new Set(dados.map(c=>c.funcao).filter(Boolean))].sort();
+  cargos.forEach(c=>{const o=document.createElement('option');o.value=c;o.textContent=c;sel.appendChild(o)});
+}
+function popularFiltrosCurso(){
+  const sel=document.getElementById('f-curso');
+  CURSOS.forEach(c=>{const o=document.createElement('option');o.value=c;o.textContent=LABELS[c];sel.appendChild(o)});
+}
+
+// ─── Render ───────────────────────────────────────────────────
+function renderTabela(lista){
+  document.getElementById('thead').innerHTML=`<tr>
+    <th style="text-align:left;padding-left:14px">Colaborador</th>
+    ${CURSOS.map(c=>`<th title="${LABELS[c]}">${LABELS[c]}</th>`).join('')}
+    <th>+ Doc</th>
+  </tr>`;
+  const tbody=document.getElementById('tbody');
+  tbody.innerHTML='';
+  lista.forEach(col=>{
+    const tr=document.createElement('tr');
+    // célula colaborador
+    const td0=document.createElement('td');
+    td0.className='col-colab';
+    td0.innerHTML=`<div class="c-nome">${col.nome}<span class="c-mat">#${col.mat}</span></div>
+                   <div class="c-cargo">${col.funcao}·${col.setor}</div>`;
+    tr.appendChild(td0);
+
+    // células cursos
+    CURSOS.forEach(curso=>{
+      const td=document.createElement('td');
+      td.className='cc';
+      const info=col.cursos[curso];
+      const st=info?info.status:'sem_data';
+      const exigido=col.cursosExigidos.includes(curso);
+
+      let cls='nao_exig', icon='＋', dateStr='', vdot='';
+
+      if(!info||(!info.emissao&&!exigido)){
+        // não exigido e sem dado — botão discreto
+        cls='nao_exig'; icon='＋'; dateStr='';
+      } else if(st==='sem_data'){
+        cls='sem_data'; icon='＋'; dateStr=exigido?'Adicionar':'Adicionar';
+      } else {
+        cls=exigido?st:'extra';
+        icon=STATUS_ICON[cls]||'✔';
+        dateStr=info.semValidade?'∞':fmt(info.vencimento);
+        if(info.validado) vdot=`<span class="vdot ${info.apto?'ok':'nok'}"></span>`;
+      }
+
+      td.innerHTML=`<span class="badge ${cls}" title="${tooltip(info,exigido)}"
+        onclick="abrirModal('${col.mat}','${esc(col.nome)}','${esc(col.funcao)}','${curso}',${exigido})">
+        <span class="b-icon">${icon}</span>
+        ${dateStr?`<span class="b-date">${dateStr}</span>`:''}
+        ${vdot}
+      </span>`;
+      tr.appendChild(td);
+    });
+
+    // célula ação
+    const tda=document.createElement('td');
+    tda.className='col-act';
+    tda.innerHTML=`<button class="btn-add-row"
+      onclick="abrirModalLinha('${col.mat}','${esc(col.nome)}','${esc(col.funcao)}')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Doc
+    </button>`;
+    tr.appendChild(tda);
+    tbody.appendChild(tr);
+  });
+}
+
+function fmt(iso){if(!iso)return'';const[y,m,d]=iso.split('-');return`${d}/${m}/${y}`}
+function esc(s){return String(s).replace(/'/g,"\\'")}
+function tooltip(info,exigido){
+  if(!info||!info.emissao)return exigido?'Documento obrigatório — clique para adicionar':'Clique para adicionar';
+  let t=`Emissão: ${fmt(info.emissao)}`;
+  if(info.vencimento&&!info.semValidade)t+=` · Vence: ${fmt(info.vencimento)}`;
+  if(info.semValidade)t+=' · Sem validade';
+  if(info.validado)t+=info.apto?' · ✅ Aceito':` · ❌ Rejeitado: ${info.obs}`;
+  return t;
+}
+
+// ─── Filtros ──────────────────────────────────────────────────
+function filtrarPainel(s){
+  document.getElementById('f-status').value=
+    s==='aceito'||s==='rejeitado'?'':s;
+  document.getElementById('f-validacao').value=
+    s==='aceito'?'aceito':s==='rejeitado'?'rejeitado':'';
+  aplicarFiltros();
+}
+function limparFiltros(){
+  ['f-nome','f-setor','f-cargo','f-status','f-validacao','f-curso']
+    .forEach(id=>{const el=document.getElementById(id);el.value='';});
+  aplicarFiltros();
+}
+function aplicarFiltros(){
+  const nome=document.getElementById('f-nome').value.toLowerCase();
+  const setor=document.getElementById('f-setor').value;
+  const cargo=document.getElementById('f-cargo').value;
+  const status=document.getElementById('f-status').value;
+  const valid=document.getElementById('f-validacao').value;
+  const curso=document.getElementById('f-curso').value;
+
+  const lista=dados.filter(col=>{
+    if(nome&&!col.nome.toLowerCase().includes(nome))return false;
+    if(setor&&col.setor!==setor)return false;
+    if(cargo&&col.funcao!==cargo)return false;
+    if(status){
+      const tem=Object.values(col.cursos).some(c=>c&&c.exigido&&c.status===status);
+      if(!tem)return false;
+    }
+    if(valid==='aceito'){
+      const tem=Object.values(col.cursos).some(c=>c&&c.validado&&c.apto);
+      if(!tem)return false;
+    }
+    if(valid==='rejeitado'){
+      const tem=Object.values(col.cursos).some(c=>c&&c.validado&&!c.apto);
+      if(!tem)return false;
+    }
+    if(valid==='pendente'){
+      const tem=Object.values(col.cursos).some(c=>c&&c.exigido&&c.emissao&&!c.validado);
+      if(!tem)return false;
+    }
+    if(curso){
+      const c=col.cursos[curso];
+      if(!c||!c.emissao)return false;
+    }
+    return true;
+  });
+  renderTabela(lista);
+}
+
+['f-nome','f-setor','f-cargo','f-status','f-validacao','f-curso'].forEach(id=>{
+  const el=document.getElementById(id);
+  el.addEventListener('input',aplicarFiltros);
+  el.addEventListener('change',aplicarFiltros);
+});
+
+// ─── Modal — abrir por badge ──────────────────────────────────
+function abrirModal(mat,nome,funcao,curso,exigido){
+  const col=dados.find(c=>c.mat===mat);
+  const info=col?.cursos[curso]||{};
+  modalCtx={mat,curso,modo:'direto'};
+
+  document.getElementById('grp-curso').style.display='none';
+  preencherModalHead(nome,funcao,curso,info);
+  preencherTabDoc(curso,info.emissao||'');
+  preencherTabInfo(info);
+  preencherTabVal(info,mat,curso);
+  abaAtiva('doc',document.querySelectorAll('.tab-btn')[0]);
+  mostrarActions('salvar');
+  document.getElementById('overlay').classList.add('open');
+}
+
+// ─── Modal — abrir por botão "+ Doc" ─────────────────────────
+function abrirModalLinha(mat,nome,funcao){
+  const col=dados.find(c=>c.mat===mat);
+  modalCtx={mat,curso:null,modo:'linha'};
+
+  document.getElementById('m-titulo').textContent='Adicionar / Atualizar';
+  document.getElementById('m-pill').textContent='';
+  document.getElementById('m-pill').className='modal-status-pill';
+  document.getElementById('m-sub').textContent=`${nome} · ${funcao}`;
+
+  // Popula select com TODOS os cursos
+  const sel=document.getElementById('m-curso');
+  sel.innerHTML=CURSOS.map(c=>`<option value="${c}">${LABELS[c]}</option>`).join('');
+  document.getElementById('grp-curso').style.display='block';
+
+  sel.onchange=()=>{
+    const c=sel.value;
+    const info=col?.cursos[c]||{};
+    preencherTabDoc(c,info.emissao||'');
+    preencherTabInfo(info);
+    preencherTabVal(info,mat,c);
+  };
+  sel.dispatchEvent(new Event('change'));
+
+  abaAtiva('doc',document.querySelectorAll('.tab-btn')[0]);
+  mostrarActions('salvar');
+  document.getElementById('overlay').classList.add('open');
+}
+
+function preencherModalHead(nome,funcao,curso,info){
+  document.getElementById('m-titulo').textContent=LABELS[curso]||curso;
+  const pill=document.getElementById('m-pill');
+  const st=info.status||'sem_data';
+  const pillMap={apto:'pill-apto',a_vencer:'pill-a_vencer',vencido:'pill-vencido',sem_data:'pill-sem_data'};
+  const pillTxt={apto:'Apto',a_vencer:'A Vencer',vencido:'Vencido',sem_data:'Sem Documento'};
+  pill.className=`modal-status-pill ${pillMap[st]||'pill-sem_data'}`;
+  pill.textContent=pillTxt[st]||'—';
+  document.getElementById('m-sub').textContent=`${nome} · ${funcao}`;
+}
+
+function preencherTabDoc(curso,emissao){
+  document.getElementById('m-data-label').textContent=DATA_LABEL[curso]||'Data *';
+  document.getElementById('m-data').value=emissao||'';
+  document.getElementById('m-data-hint').textContent=
+    curso==='CNH'?'Informe a data de vencimento da CNH.':
+    curso==='OFFICE'||curso==='5S'||curso==='ELETROTECNICO'?'Sem validade — documento permanente.':
+    '';
+  document.getElementById('m-pdf').value='';
+  document.getElementById('m-erro').textContent='';
+}
+
+function preencherTabInfo(info){
+  const div=document.getElementById('info-content');
+  if(!info||!info.emissao){div.className='no-doc-msg';div.textContent='Nenhum documento cadastrado ainda.';return;}
+  div.className='';
+  div.innerHTML=`<div class="doc-info-box">
+    ${row('Data de Emissão', fmt(info.emissao))}
+    ${info.vencimento&&!info.semValidade?row('Vencimento Calculado',fmt(info.vencimento)):''}
+    ${info.semValidade?row('Validade','Sem validade (permanente)'):''}
+    ${info.pdfName?row('Arquivo PDF',`<a class="doc-pdf-link" href="${info.pdfUrl}" target="_blank">${info.pdfName}</a>`):''}
+    ${info.uploadedBy?row('Adicionado por',info.uploadedBy):''}
+    ${info.uploadedAt?row('Data do upload',fmt(info.uploadedAt)):''}
+  </div>
+  ${info.validado?`<div class="val-status-box ${info.apto?'ok':'nok'}">
+    <span>${info.apto?'✅':'❌'}</span>
+    <div>
+      <strong>${info.apto?'Documento Aceito':'Documento Rejeitado'}</strong><br>
+      <span style="font-size:.82rem">Por ${info.validadoPor} em ${fmt(info.validadoEm)}${info.obs?` — ${info.obs}`:''}</span>
+    </div>
+  </div>`:'<div style="font-size:.84rem;color:#718096;margin-top:10px;text-align:center">Aguardando validação</div>'}`;
+}
+
+function row(l,v){return`<div class="doc-info-row"><span>${l}</span><span>${v}</span></div>`}
+
+function preencherTabVal(info,mat,curso){
+  const div=document.getElementById('val-content');
+  if(!info||!info.emissao){
+    div.innerHTML='<div class="no-doc-msg">Adicione um documento para habilitar a validação.</div>';
+    return;
+  }
+  const apt=info.apto===true?'selected':'';
+  const nok=info.apto===false?'selected':'';
+  div.innerHTML=`
+    <p style="font-size:.85rem;color:#718096;margin-bottom:14px">
+      Confirme se o documento apresentado está dentro dos padrões exigidos.
+    </p>
+    <div class="val-toggle">
+      <label class="val-opt apto-opt ${apt}" id="opt-apto">
+        <input type="radio" name="val-radio" value="apto" ${apt?'checked':''} onchange="selVal(true)">
+        ✅ Apto
+      </label>
+      <label class="val-opt nok-opt ${nok}" id="opt-nok">
+        <input type="radio" name="val-radio" value="nok" ${nok?'checked':''} onchange="selVal(false)">
+        ❌ Inapto
+      </label>
+    </div>
+    <div class="form-group" id="grp-obs" style="display:${info.apto===false?'block':'none'}">
+      <label>Observação / Motivo *</label>
+      <textarea id="val-obs" placeholder="Descreva o motivo da reprovação...">${info.obs||''}</textarea>
+    </div>
+    <div class="modal-actions" style="padding:0;border:none;margin-top:8px">
+      <button class="btn btn-success" onclick="salvarValidacao('${mat}','${curso}')">Confirmar Validação</button>
+    </div>`;
+}
+
+function selVal(apto){
+  document.getElementById('opt-apto').className=`val-opt apto-opt ${apto?'selected':''}`;
+  document.getElementById('opt-nok').className=`val-opt nok-opt ${!apto?'selected':''}`;
+  document.getElementById('grp-obs').style.display=apto?'none':'block';
+}
+
+// ─── Abas ─────────────────────────────────────────────────────
+function abaAtiva(id, btn){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-'+id).classList.add('active');
+  // Esconde ações ao entrar na aba de validação
+  document.getElementById('modal-actions').style.display=id==='val'?'none':'flex';
+}
+
+function mostrarActions(modo){document.getElementById('modal-actions').style.display='flex'}
+
+// ─── Fechar ───────────────────────────────────────────────────
+function fecharModal(){document.getElementById('overlay').classList.remove('open')}
+document.getElementById('overlay').addEventListener('click',e=>{if(e.target===e.currentTarget)fecharModal()});
+
+// ─── Salvar documento ─────────────────────────────────────────
+async function salvarDocumento(){
+  const data=document.getElementById('m-data').value;
+  if(!data){document.getElementById('m-erro').textContent='Informe a data.';return;}
+  const curso=modalCtx.modo==='linha'
+    ?document.getElementById('m-curso').value
+    :modalCtx.curso;
+  if(!curso){document.getElementById('m-erro').textContent='Selecione o curso.';return;}
+
+  const fd=new FormData();
+  fd.append('data',data);
+  fd.append('uploadedBy','João Victor Santos');
+  const pdf=document.getElementById('m-pdf').files[0];
+  if(pdf) fd.append('pdf',pdf);
+
+  const btn=document.getElementById('btn-salvar');
+  btn.textContent='Salvando…';btn.disabled=true;
+  try{
+    const r=await fetch(`${API}/colaboradores/${modalCtx.mat}/curso/${curso}`,{method:'POST',body:fd});
+    const j=await r.json();
+    if(!r.ok)throw new Error(j.error||'Erro');
+    fecharModal(); await carregar();
+  }catch(e){document.getElementById('m-erro').textContent=e.message;}
+  finally{btn.textContent='Salvar';btn.disabled=false;}
+}
+
+// ─── Salvar validação ─────────────────────────────────────────
+async function salvarValidacao(mat,curso){
+  const radio=document.querySelector('input[name="val-radio"]:checked');
+  if(!radio){alert('Selecione Apto ou Inapto.');return;}
+  const apto=radio.value==='apto';
+  const obs=document.getElementById('val-obs')?.value||'';
+  if(!apto&&!obs.trim()){alert('Informe o motivo da reprovação.');return;}
+  try{
+    const r=await fetch(`${API}/colaboradores/${mat}/curso/${curso}/validar`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({apto,obs,validadoPor:'João Victor Santos'})
+    });
+    const j=await r.json();
+    if(!r.ok)throw new Error(j.error);
+    fecharModal(); await carregar();
+  }catch(e){alert('Erro: '+e.message);}
+}
+
+carregar();
+</script>
+</body>
+</html>

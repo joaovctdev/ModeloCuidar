@@ -1,0 +1,7 @@
+node_modules/
+uploads/
+*.tmp
+documentos_meta.json
+screenshot*.png
+doc_final.png
+package-lock.json
