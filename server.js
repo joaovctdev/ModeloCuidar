@@ -20,12 +20,12 @@ app.use('/uploads', express.static(UPLOADS));
 const CURSOS_CARGO = {
   'ELETRICISTA DE REDE':  ['ASO','NR_10','NR_35','NR_10SEP','POP00','DIRECAO_DEF','CNH'],
   'AUXILIAR ELETRICISTA': ['ASO','NR_10','NR_35','NR_10SEP','POP00','DIRECAO_DEF','CNH'],
-  'ELETRICISTA PODADOR':  ['ASO','NR_10','NR_35','NR_10SEP','POP00','DIRECAO_DEF','PODADOR'],
+  'ELETRICISTA PODADOR':  ['ASO','NR_10','NR_35','NR_10SEP','POP00','DIRECAO_DEF','PODADOR','CNH'],
   'AUX DE TRANSPORTE':    ['ASO','NR_10','NR_35','NR_10SEP','POP00','DIRECAO_DEF','CNH'],
-  'AUX ADM I':            ['ASO','DIRECAO_DEF','CNH','OFFICE','5S','ELETROTECNICO'],
+  'AUX ADM I':            ['ASO','DIRECAO_DEF','OFFICE','5S','ELETROTECNICO','CNH'],
   'SUPERVISOR DE OBRAS':  ['ASO','NR_10','NR_35','POP00','DIRECAO_DEF','CNH','OPERADOR','ELETROTECNICO'],
-  'TEC FECHAMENTO I':     ['ASO','NR_10','NR_35','DIRECAO_DEF','CNH','OFFICE','5S','ELETROTECNICO'],
-  'MOT OPERADOR':         ['ASO','NR_10','NR_12','NR_35','NR_10SEP','POP00','DIRECAO_DEF','OPERADOR'],
+  'TEC FECHAMENTO I':     ['ASO','NR_10','NR_35','DIRECAO_DEF','OFFICE','5S','ELETROTECNICO','CNH'],
+  'MOT OPERADOR':         ['ASO','NR_10','NR_12','NR_35','NR_10SEP','POP00','DIRECAO_DEF','OPERADOR','CNH'],
   'OPERADOR RETRO':       ['ASO','NR_10','NR_12','NR_35','NR_10SEP','POP00','DIRECAO_DEF','RETRO','CNH'],
 };
 
@@ -109,7 +109,7 @@ async function writeXlsxSafe(wb, filePath, retries=5) {
   const tmp = filePath+'.tmp';
   for (let i=0; i<retries; i++) {
     try {
-      xlsx.writeFile(wb, tmp);
+      xlsx.writeFile(wb, tmp, { bookType: 'xlsx' });
       if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
       fs.renameSync(tmp, filePath);
       return;
@@ -128,7 +128,7 @@ app.get('/api/colaboradores', (req, res) => {
   try {
     const { rows } = lerPlanilha();
     const meta     = lerMeta();
-    let totVencido=0, totAVencer=0, totApto=0, totSemDoc=0, totAceito=0, totRejeitado=0;
+    let totVencido=0, totAVencer=0, totApto=0, totAceito=0, totRejeitado=0, totSemAnexo=0;
 
     const colaboradores = rows.map(row => {
       const fkey  = Object.keys(row).find(k=>k.toUpperCase().includes('FUN'));
@@ -148,8 +148,7 @@ app.get('/api/colaboradores', (req, res) => {
 
         // Contagem — apenas cursos exigidos
         if (exigido) {
-          if (!emissao)            totSemDoc++;
-          else if (status==='vencido')   totVencido++;
+          if (status==='vencido')   totVencido++;
           else if (status==='a_vencer')  totAVencer++;
           else if (status==='apto')      totApto++;
         }
@@ -164,6 +163,8 @@ app.get('/api/colaboradores', (req, res) => {
           const f = fs.readdirSync(pdfDir).find(f=>f.startsWith(key+'_')&&f.endsWith('.pdf'));
           if (f) { pdfUrl=`/uploads/${matStr}/${f}`; pdfName=f; }
         }
+
+        if (exigido && emissao && !pdfUrl) totSemAnexo++;
 
         cursos[key] = {
           emissao, vencimento,
@@ -190,7 +191,8 @@ app.get('/api/colaboradores', (req, res) => {
 
     res.json({ colaboradores, totais:{
       vencido:totVencido, a_vencer:totAVencer, apto:totApto,
-      sem_doc:totSemDoc, aceito:totAceito, rejeitado:totRejeitado,
+      aceito:totAceito, rejeitado:totRejeitado,
+      sem_anexo:totSemAnexo,
     }});
   } catch(e) { console.error(e); res.status(500).json({error:e.message}); }
 });

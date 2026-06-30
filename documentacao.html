@@ -81,6 +81,7 @@ button{font-family:var(--font)}
 .p-card.sem_doc  {background:var(--gray-bg);   border-color:#718096}
 .p-card.aceito   {background:var(--blue-bg);   border-color:var(--blue)}
 .p-card.rejeitado{background:var(--purple-bg); border-color:var(--purple)}
+.p-card.sem_anexo {background:#FFFAF0;         border-color:#ED8936}
 .p-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .p-card.vencido   .p-icon{background:rgba(197,48,48,.1);  color:var(--red)}
 .p-card.a_vencer  .p-icon{background:rgba(214,158,46,.1); color:#D69E2E}
@@ -88,6 +89,7 @@ button{font-family:var(--font)}
 .p-card.sem_doc   .p-icon{background:rgba(74,85,104,.1);  color:#718096}
 .p-card.aceito    .p-icon{background:rgba(43,108,176,.1); color:var(--blue)}
 .p-card.rejeitado .p-icon{background:rgba(85,60,154,.1);  color:var(--purple)}
+.p-card.sem_anexo  .p-icon{background:rgba(237,137,54,.1); color:#DD6B20}
 .p-icon svg{width:22px;height:22px}
 .p-num{font-size:2rem;font-weight:700;line-height:1}
 .p-card.vencido   .p-num{color:var(--red)}
@@ -96,6 +98,7 @@ button{font-family:var(--font)}
 .p-card.sem_doc   .p-num{color:#718096}
 .p-card.aceito    .p-num{color:var(--blue)}
 .p-card.rejeitado .p-num{color:var(--purple)}
+.p-card.sem_anexo  .p-num{color:#DD6B20}
 .p-label{font-size:.8rem;font-weight:600;text-transform:uppercase;letter-spacing:.4px;opacity:.65;margin-top:1px}
 
 /* ═══ FILTROS ═════════════════════════════════════════════════ */
@@ -148,6 +151,7 @@ tbody tr:last-child{border-bottom:none}
 
 /* ═══ BADGE ═══════════════════════════════════════════════════ */
 td.cc{text-align:center;padding:5px 3px;vertical-align:middle}
+td.cc.critico{background:rgba(197,48,48,.10)}
 .badge{
   display:inline-flex;flex-direction:column;align-items:center;
   gap:1px;padding:4px 6px;border-radius:7px;min-width:60px;
@@ -170,13 +174,22 @@ td.cc{text-align:center;padding:5px 3px;vertical-align:middle}
 .b-date{font-size:.68rem;font-weight:600;line-height:1}
 .b-add {font-size:.62rem;font-weight:700;text-transform:uppercase}
 
-/* Dot de validação (canto superior direito do badge) */
+/* Dot de validação com símbolo (canto superior direito do badge) */
 .badge .vdot{
-  position:absolute;top:-4px;right:-4px;
-  width:10px;height:10px;border-radius:50%;border:2px solid #fff
+  position:absolute;top:-5px;right:-5px;
+  width:14px;height:14px;border-radius:50%;border:2px solid #fff;
+  font-size:8px;font-weight:900;color:#fff;
+  display:flex;align-items:center;justify-content:center;line-height:1
 }
 .vdot.ok  {background:#38A169}
 .vdot.nok {background:#E53E3E}
+
+/* Dot laranja — tem data mas sem PDF (canto inferior direito do badge) */
+.badge .pdot{
+  position:absolute;bottom:-4px;right:-4px;
+  width:10px;height:10px;border-radius:50%;border:2px solid #fff;
+  background:#ED8936;font-size:0
+}
 
 /* ═══ BTN + DOC ═══════════════════════════════════════════════ */
 td.col-act{text-align:center;padding:5px 6px;vertical-align:middle}
@@ -302,6 +315,23 @@ td.col-act{text-align:center;padding:5px 6px;vertical-align:middle}
 .val-status-box.ok {background:#F0FFF4;border:1px solid var(--green-bd);color:var(--green)}
 .val-status-box.nok{background:#FFF5F5;border:1px solid var(--red-bd);  color:var(--red)}
 
+/* PDF miniatura na aba validação */
+.pdf-thumb-wrap{
+  margin-bottom:16px;border-radius:10px;overflow:hidden;
+  border:1px solid rgba(5,134,63,.15);background:var(--gray-bg)
+}
+.pdf-thumb-label{
+  font-size:.72rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:.4px;color:var(--g1);padding:8px 12px;
+  border-bottom:1px solid rgba(5,134,63,.1);
+  display:flex;align-items:center;justify-content:space-between
+}
+.pdf-thumb{width:100%;height:320px;border:none;display:block}
+.pdf-no-attach{
+  text-align:center;padding:18px;font-size:.84rem;color:#A0AEC0;
+  border:1.5px dashed var(--gray-bd);border-radius:10px;margin-bottom:16px
+}
+
 /* Ações do modal */
 .modal-actions{
   display:flex;gap:10px;padding:14px 26px 22px;
@@ -383,10 +413,7 @@ td.col-act{text-align:center;padding:5px 6px;vertical-align:middle}
       <div class="p-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
       <div><div class="p-num" id="n-apto">—</div><div class="p-label">Aptos</div></div>
     </div>
-    <div class="p-card sem_doc" onclick="filtrarPainel('sem_data')">
-      <div class="p-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg></div>
-      <div><div class="p-num" id="n-semdoc">—</div><div class="p-label">Sem Documento</div></div>
-    </div>
+
     <div class="p-card aceito" onclick="filtrarPainel('aceito')">
       <div class="p-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
       <div><div class="p-num" id="n-aceito">—</div><div class="p-label">Aceitos</div></div>
@@ -394,6 +421,10 @@ td.col-act{text-align:center;padding:5px 6px;vertical-align:middle}
     <div class="p-card rejeitado" onclick="filtrarPainel('rejeitado')">
       <div class="p-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div>
       <div><div class="p-num" id="n-rejeitado">—</div><div class="p-label">Rejeitados</div></div>
+    </div>
+    <div class="p-card sem_anexo" onclick="filtrarPainel('sem_anexo')">
+      <div class="p-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></div>
+      <div><div class="p-num" id="n-semanexo">—</div><div class="p-label">Sem Anexo PDF</div></div>
     </div>
   </div>
 
@@ -410,6 +441,7 @@ td.col-act{text-align:center;padding:5px 6px;vertical-align:middle}
       <select id="f-status"><option value="">Todos os status</option><option value="vencido">Vencido</option><option value="a_vencer">A Vencer</option><option value="apto">Apto</option><option value="sem_data">Sem Documento</option></select>
       <select id="f-validacao"><option value="">Todas as validações</option><option value="aceito">Aceitos</option><option value="rejeitado">Rejeitados</option><option value="pendente">Pendente validação</option></select>
       <select id="f-curso"><option value="">Todos os cursos</option></select>
+      <select id="f-pdf"><option value="">Todos (PDF)</option><option value="com_pdf">Com PDF anexado</option><option value="sem_pdf">Sem PDF anexado</option></select>
       <button class="btn-limpar" onclick="limparFiltros()">✕ Limpar</button>
     </div>
   </div>
@@ -525,9 +557,9 @@ async function carregar(){
     document.getElementById('n-vencido').textContent  = t.vencido;
     document.getElementById('n-avencer').textContent  = t.a_vencer;
     document.getElementById('n-apto').textContent     = t.apto;
-    document.getElementById('n-semdoc').textContent   = t.sem_doc;
     document.getElementById('n-aceito').textContent   = t.aceito;
     document.getElementById('n-rejeitado').textContent= t.rejeitado;
+    document.getElementById('n-semanexo').textContent = t.sem_anexo;
     popularFiltrosCargo();
     popularFiltrosCurso();
     renderTabela(dados);
@@ -570,10 +602,11 @@ function renderTabela(lista){
     // células cursos
     CURSOS.forEach(curso=>{
       const td=document.createElement('td');
-      td.className='cc';
       const info=col.cursos[curso];
       const st=info?info.status:'sem_data';
       const exigido=col.cursosExigidos.includes(curso);
+      const critico=exigido&&(st==='vencido'||st==='sem_data');
+      td.className='cc'+(critico?' critico':'');
 
       let cls='nao_exig', icon='＋', dateStr='', vdot='';
 
@@ -586,14 +619,15 @@ function renderTabela(lista){
         cls=exigido?st:'extra';
         icon=STATUS_ICON[cls]||'✔';
         dateStr=info.semValidade?'∞':fmt(info.vencimento);
-        if(info.validado) vdot=`<span class="vdot ${info.apto?'ok':'nok'}"></span>`;
+        if(info.validado) vdot=`<span class="vdot ${info.apto?'ok':'nok'}">${info.apto?'✓':'✗'}</span>`;
       }
 
+      const pdot=info&&info.exigido&&info.emissao&&!info.pdfUrl?'<span class="pdot" title="Sem PDF anexado"></span>':'';
       td.innerHTML=`<span class="badge ${cls}" title="${tooltip(info,exigido)}"
         onclick="abrirModal('${col.mat}','${esc(col.nome)}','${esc(col.funcao)}','${curso}',${exigido})">
         <span class="b-icon">${icon}</span>
         ${dateStr?`<span class="b-date">${dateStr}</span>`:''}
-        ${vdot}
+        ${vdot}${pdot}
       </span>`;
       tr.appendChild(td);
     });
@@ -625,13 +659,15 @@ function tooltip(info,exigido){
 // ─── Filtros ──────────────────────────────────────────────────
 function filtrarPainel(s){
   document.getElementById('f-status').value=
-    s==='aceito'||s==='rejeitado'?'':s;
+    s==='aceito'||s==='rejeitado'||s==='sem_anexo'?'':s;
   document.getElementById('f-validacao').value=
     s==='aceito'?'aceito':s==='rejeitado'?'rejeitado':'';
+  document.getElementById('f-pdf').value=
+    s==='sem_anexo'?'sem_pdf':'';
   aplicarFiltros();
 }
 function limparFiltros(){
-  ['f-nome','f-setor','f-cargo','f-status','f-validacao','f-curso']
+  ['f-nome','f-setor','f-cargo','f-status','f-validacao','f-curso','f-pdf']
     .forEach(id=>{const el=document.getElementById(id);el.value='';});
   aplicarFiltros();
 }
@@ -642,6 +678,7 @@ function aplicarFiltros(){
   const status=document.getElementById('f-status').value;
   const valid=document.getElementById('f-validacao').value;
   const curso=document.getElementById('f-curso').value;
+  const pdf=document.getElementById('f-pdf').value;
 
   const lista=dados.filter(col=>{
     if(nome&&!col.nome.toLowerCase().includes(nome))return false;
@@ -667,12 +704,20 @@ function aplicarFiltros(){
       const c=col.cursos[curso];
       if(!c||!c.emissao)return false;
     }
+    if(pdf==='com_pdf'){
+      const tem=Object.values(col.cursos).some(c=>c&&c.exigido&&c.emissao&&c.pdfUrl);
+      if(!tem)return false;
+    }
+    if(pdf==='sem_pdf'){
+      const tem=Object.values(col.cursos).some(c=>c&&c.exigido&&c.emissao&&!c.pdfUrl);
+      if(!tem)return false;
+    }
     return true;
   });
   renderTabela(lista);
 }
 
-['f-nome','f-setor','f-cargo','f-status','f-validacao','f-curso'].forEach(id=>{
+['f-nome','f-setor','f-cargo','f-status','f-validacao','f-curso','f-pdf'].forEach(id=>{
   const el=document.getElementById(id);
   el.addEventListener('input',aplicarFiltros);
   el.addEventListener('change',aplicarFiltros);
@@ -776,7 +821,30 @@ function preencherTabVal(info,mat,curso){
   }
   const apt=info.apto===true?'selected':'';
   const nok=info.apto===false?'selected':'';
+
+  const pdfBlock=info.pdfUrl
+    ?`<div class="pdf-thumb-wrap">
+        <div class="pdf-thumb-label">
+          <span>📎 Documento anexado</span>
+          <a href="${info.pdfUrl}" target="_blank" class="doc-pdf-link" style="font-size:.72rem;font-weight:600">Abrir ↗</a>
+        </div>
+        <iframe class="pdf-thumb" src="${info.pdfUrl}" title="Prévia do documento"></iframe>
+      </div>`
+    :`<div class="pdf-no-attach">📄 Nenhum PDF anexado a este documento.</div>`;
+
+  const valStatusBlock=info.validado
+    ?`<div class="val-status-box ${info.apto?'ok':'nok'}" style="margin-bottom:14px">
+        <span>${info.apto?'✅':'❌'}</span>
+        <div>
+          <strong>${info.apto?'Aceito':'Rejeitado'} por ${info.validadoPor||'—'}</strong><br>
+          <span style="font-size:.82rem">Em ${fmt(info.validadoEm||'')}${info.obs?` — ${info.obs}`:''}</span>
+        </div>
+      </div>`
+    :'';
+
   div.innerHTML=`
+    ${pdfBlock}
+    ${valStatusBlock}
     <p style="font-size:.85rem;color:#718096;margin-bottom:14px">
       Confirme se o documento apresentado está dentro dos padrões exigidos.
     </p>
